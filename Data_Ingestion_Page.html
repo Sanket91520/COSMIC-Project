@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ingest Data | COSMIC</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+      :root {
+        --bg-darker: #020408;
+        --bg-panel: #0a0d14;
+        --cosmic-blue: #00f2ff;
+        --bronze: #cd7f32;
+        --border: rgba(0, 242, 255, 0.1);
+        --text-dim: #64748b;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Inter', sans-serif;
+      }
+
+      body {
+        background: var(--bg-darker);
+        color: #fff;
+        display: flex;
+        height: 100vh;
+        overflow: hidden;
+      }
+
+      /* --- SIDEBAR NAVIGATION --- */
+      nav {
+        width: 260px;
+        background: var(--bg-panel);
+        border-right: 1px solid var(--border);
+        display: flex;
+        flex-direction: column;
+        padding: 30px 20px;
+        flex-shrink: 0;
+      }
+
+      .nav-logo {
+        font-weight: 800;
+        color: var(--cosmic-blue);
+        letter-spacing: 3px;
+        margin-bottom: 50px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 1.2rem;
+      }
+
+      .nav-section-label {
+        font-size: 0.9rem;
+        color: var(--text-dim);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin: 20px 0 10px 10px;
+      }
+
+      .nav-item {
+        padding: 12px 15px;
+        color: var(--text-dim);
+        text-decoration: none;
+        margin-bottom: 4px;
+        border-radius: 8px;
+        transition: 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 0.9rem;
+      }
+
+      .nav-item:hover,
+      .nav-item.active {
+        background: rgba(0, 242, 255, 0.05);
+        color: var(--cosmic-blue);
+      }
+
+      .nav-item.active {
+        border-left: 3px solid var(--cosmic-blue);
+        background: rgba(0, 242, 255, 0.08);
+      }
+
+      /* --- MAIN CONTENT --- */
+      .main-wrapper {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+      }
+
+      /* Top Header Bar */
+      .top-bar {
+        height: 70px;
+        padding: 0 40px;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        border-bottom: 1px solid var(--border);
+        gap: 25px;
+      }
+
+      .user-profile {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+      }
+
+      .user-avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: var(--cosmic-blue);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #000;
+        font-weight: bold;
+      }
+
+      .content-body {
+        padding: 40px;
+        max-width: 1200px;
+        margin: 0 auto;
+        width: 100%;
+      }
+
+      /* --- INGESTION STYLES --- */
+      .ingestion-grid {
+        display: grid;
+        grid-template-columns: 1.4fr 1fr;
+        gap: 30px;
+        margin-top: 30px;
+      }
+
+      .upload-card {
+        background: rgba(255, 255, 255, 0.02);
+        border: 2px dashed var(--border);
+        border-radius: 20px;
+        padding: 50px;
+        text-align: center;
+        transition: 0.3s;
+      }
+
+      .upload-card:hover {
+        border-color: var(--cosmic-blue);
+      }
+
+      .config-card {
+        background: var(--bg-panel);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 30px;
+      }
+
+      .form-input {
+        width: 100%;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--border);
+        padding: 12px;
+        border-radius: 8px;
+        color: white;
+        margin-top: 8px;
+        margin-bottom: 20px;
+      }
+
+      .bronze-alert {
+        background: rgba(205, 127, 50, 0.1);
+        border-left: 3px solid var(--bronze);
+        padding: 15px;
+        font-size: 0.85rem;
+        color: #dcb08a;
+        border-radius: 4px;
+      }
+
+      .btn-primary {
+        width: 100%;
+        background: var(--cosmic-blue);
+        color: #000;
+        border: none;
+        padding: 15px;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+   <nav id="main-sidebar">
+    <div class="nav-logo"><i class="fas fa-satellite"></i> COSMIC</div>
+    
+    <p class="nav-group-label">Core</p>
+    <a href="Dashboard.html" class="nav-item" id="nav-dashboard">
+        <i class="fas fa-th-large"></i> Dashboard
+    </a>
+    <a href="Data_Ingestion_Page.html" class="nav-item" id="nav-ingestion">
+        <i class="fas fa-upload"></i> Data Ingestion
+    </a>
+    <a href="Central_Data_Repository.html" class="nav-item" id="nav-repository">
+        <i class="fas fa-server"></i> Repository
+    </a>
+    
+    <p class="nav-group-label">Analysis</p>
+    <a href="Visualization_Page.html" class="nav-item" id="nav-visualization">
+        <i class="fas fa-expand"></i> Visualization
+    </a>
+    <a href="AI_Insights_Page.html" class="nav-item" id="nav-ai">
+        <i class="fas fa-brain"></i> AI Insights
+    </a>
+
+    <p class="nav-group-label" style="margin-top:auto">Admin</p>
+    <a href="Governance.html" class="nav-item" id="nav-governance">
+        <i class="fas fa-shield-alt"></i> Governance
+    </a>
+    <a href="" class="nav-item" id="nav-settings">
+        <i class="fas fa-cog"></i> Settings
+    </a>
+</nav>
+    <div class="main-wrapper">
+      <header class="top-bar">
+        <i class="far fa-bell" style="color: var(--text-dim); cursor: pointer;"></i>
+        <div class="user-profile">
+          <span style="font-size: 0.85rem;">Dr. Aris Thorne</span>
+          <div class="user-avatar">AT</div>
+        </div>
+      </header>
+      <div class="content-body">
+        <div class="header-text">
+        
+          <h1 style="font-size: 2.2rem; font-weight: 800;">Data Ingestion</h1>
+          <p style="color: var(--text-dim);">Onboard multi-source astronomical datasets into the unified pipeline.</p>
+        </div>
+        <div class="ingestion-grid">
+          <div class="left-section">
+            <div class="upload-card">
+              <i class="fas fa-file-import" style="font-size: 2.5rem; color: var(--cosmic-blue); margin-bottom: 20px;"></i>
+              <h3>Drop Scientific Files Here</h3>
+              <p style="color: var(--text-dim); margin-top: 10px; font-size: 0.9rem;">Supports .fits, .votable, .csv, .json</p>
+            </div>
+            <div style="margin-top: 30px; background: rgba(0,242,255,0.03); border: 1px solid var(--border); padding: 20px; border-radius: 12px;">
+              <div style="display:flex; justify-content:space-between; margin-bottom: 10px;">
+                <span style="font-size: 0.85rem;">Ingestion Progress: <strong style="color: var(--cosmic-blue);">active_scan_v2.fits</strong>
+                </span>
+                <span style="color: var(--cosmic-blue);">82%</span>
+              </div>
+              <div style="height: 6px; background: rgba(255,255,255,0.05); border-radius: 10px;">
+                <div style="width: 82%; height: 100%; background: var(--cosmic-blue); border-radius: 10px; box-shadow: 0 0 10px var(--cosmic-blue);"></div>
+              </div>
+            </div>
+          </div>
+          <div class="right-section">
+            <div class="config-card">
+              <label style="font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase;">Dataset Identifier</label>
+              <input type="text" class="form-input" placeholder="e.g. GAIA_DR3_SUBSET_01">
+              <label style="font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase;">Mission Source</label>
+              <select class="form-input">
+                <option>European Space Agency (GAIA)</option>
+                <option>NASA (Hubble/JWST)</option>
+                <option>Sloan Digital Sky Survey</option>
+              </select>
+              <div class="bronze-alert">
+                <i class="fas fa-history"></i> Raw data is automatically cached in the <strong>Bronze Reproduction Layer</strong>.
+              </div>
+
+             <a href="Data_Processing_page.html"><button class="btn-primary">INITIATE PIPELINE</button></a> 
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script>
+    function highlightActivePage() {
+        // 1. Get the current file name from the URL (e.g., "AI_Insights_Page.html")
+        const path = window.location.pathname;
+        const page = path.split("/").pop();
+
+        // 2. Remove any existing active classes
+        const navItems = document.querySelectorAll('.nav-item');
+        navItems.forEach(item => item.classList.remove('active'));
+
+        // 3. Match the page name to the link's href
+        navItems.forEach(item => {
+            const href = item.getAttribute('href');
+            if (page === href) {
+                item.classList.add('active');
+            }
+        });
+        
+        // Default: If it's just the root or index, highlight Dashboard
+        if (page === "" || page === "index.html") {
+            document.getElementById('nav-dashboard').classList.add('active');
+        }
+    }
+
+    // Run on load
+    window.onload = highlightActivePage;
+
+    // Your existing functions (like showDetail) go here
+    function showDetail() {
+        alert("Neural Engine Insight: Potential microlensing event detected.");
+    }
+</script>
+</html>

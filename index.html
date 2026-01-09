@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COSMIC | Unified Astronomical Data</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --space-black: #030508;
+        --cosmic-blue: #00a2ff;
+        --starlight: #ffffff;
+        --glass: rgba(255, 255, 255, 0.03);
+        --border: rgba(255, 255, 255, 0.1);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Inter', sans-serif;
+      }
+
+      body {
+        background-color: var(--space-black);
+        color: var(--starlight);
+        overflow-x: hidden;
+      }
+
+      /* --- Background --- */
+      #starfield {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        background: #030508;
+      }
+
+      .star {
+        position: absolute;
+        background: white;
+        border-radius: 50%;
+        animation: twinkle var(--duration) infinite;
+      }
+
+      @keyframes twinkle {
+
+        0%,
+        100% {
+          opacity: 0.2;
+        }
+
+        50% {
+          opacity: 1;
+        }
+      }
+
+      /* --- Animations --- */
+      .reveal {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: 0.8s ease-out;
+      }
+
+      .reveal.active {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* --- Hero --- */
+      .hero {
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        padding: 0 10%;
+        justify-content: space-between;
+      }
+
+      h1 {
+        font-size: clamp(2.5rem, 6vw, 4.5rem);
+        line-height: 1.1;
+        margin-bottom: 20px;
+        font-weight: 800;
+      }
+
+      .gradient-text {
+        background: linear-gradient(90deg, #fff, var(--cosmic-blue));
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      /* Morphing Image */
+      .hero-visual {
+        width: 400px;
+        height: 400px;
+        background: url('https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&q=80&w=800') center/cover;
+        border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+        animation: morph 8s ease-in-out infinite alternate;
+        border: 1px solid var(--border);
+        box-shadow: 0 0 50px rgba(0, 162, 255, 0.2);
+      }
+
+      @keyframes morph {
+        0% {
+          border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+        }
+
+        100% {
+          border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%;
+        }
+      }
+
+      /* --- Pipeline Section --- */
+      .pipeline-container {
+        padding: 100px 10%;
+        text-align: center;
+      }
+
+      .pipeline-flow {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 60px;
+        position: relative;
+        flex-wrap: wrap;
+        gap: 20px;
+      }
+
+      .step {
+        background: var(--glass);
+        border: 1px solid var(--border);
+        padding: 20px;
+        border-radius: 12px;
+        width: 160px;
+        position: relative;
+        backdrop-filter: blur(10px);
+        transition: 0.3s;
+      }
+
+      .step:hover {
+        border-color: var(--cosmic-blue);
+        transform: scale(1.05);
+      }
+
+      .step-num {
+        color: var(--cosmic-blue);
+        font-weight: 800;
+        font-size: 0.8rem;
+        margin-bottom: 10px;
+        display: block;
+      }
+
+      .connector {
+        flex-grow: 1;
+        height: 2px;
+        background: linear-gradient(90deg, var(--cosmic-blue), transparent);
+        opacity: 0.3;
+      }
+
+      /* --- Buttons --- */
+      .btn {
+        padding: 15px 30px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        display: inline-block;
+        transition: 0.3s;
+      }
+
+      .btn-blue {
+        background: var(--cosmic-blue);
+        color: white;
+        box-shadow: 0 4px 15px rgba(0, 162, 255, 0.3);
+      }
+
+      .btn-blue:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0, 162, 255, 0.5);
+      }
+
+      @media (max-width: 900px) {
+        .hero {
+          flex-direction: column;
+          text-align: center;
+          padding-top: 100px;
+        }
+
+        .hero-visual {
+          width: 300px;
+          height: 300px;
+        }
+
+        .pipeline-flow {
+          flex-direction: column;
+        }
+
+        .connector {
+          width: 2px;
+          height: 40px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="starfield"></div>
+    <section class="hero reveal">
+      <div style="max-width: 600px;">
+        <span style="color: var(--cosmic-blue); letter-spacing: 2px; font-weight: 600;">MISSION CONTROL</span>
+        <h1>One Platform. <br>
+          <span class="gradient-text">All Astronomical Data.</span>
+        </h1>
+        <p style="color: #aaa; margin-bottom: 30px; font-size: 1.1rem;">Unify, clean, and analyze fragmented datasets across missions and observatories. Built for the next frontier of discovery.</p>
+        <a href="Authentication_Page.html" class="btn btn-blue">Explore Platform</a>
+      </div>
+      <div class="hero-visual"></div>
+    </section>
+    <section class="pipeline-container">
+      <h2 class="reveal" style="font-size: 2.5rem;">The COSMIC Pipeline</h2>
+      <div class="pipeline-flow reveal">
+        <div class="step">
+          <span class="step-num">01</span>
+          <h4>Ingestion</h4>
+        </div>
+        <div class="connector"></div>
+        <div class="step">
+          <span class="step-num">02</span>
+          <h4>Cleaning</h4>
+        </div>
+        <div class="connector"></div>
+        <div class="step">
+          <span class="step-num">03</span>
+          <h4>Standardize</h4>
+        </div>
+        <div class="connector"></div>
+        <div class="step">
+          <span class="step-num">04</span>
+          <h4>Storage</h4>
+        </div>
+        <div class="connector"></div>
+        <div class="step" style="border-color: var(--cosmic-blue);">
+          <span class="step-num">05</span>
+          <h4>AI Insights</h4>
+        </div>
+      </div>
+    </section>
+    <script>
+      // Star Generation
+      const field = document.getElementById('starfield');
+      for (let i = 0; i < 150; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        star.style.width = star.style.height = Math.random() * 2 + 'px';
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = Math.random() * 100 + '%';
+        star.style.setProperty('--duration', (Math.random() * 3 + 2) + 's');
+        field.appendChild(star);
+      }
+      // Scroll Reveal
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) e.target.classList.add('active');
+        });
+      }, {
+        threshold: 0.1
+      });
+      document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+    </script>
+  </body>
+</html>

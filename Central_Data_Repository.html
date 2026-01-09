@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Repository | COSMIC Explorer</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg-darker: #020408;
+            --bg-panel: #0a0d14;
+            --cosmic-blue: #00f2ff;
+            --border: rgba(0, 242, 255, 0.1);
+            --text-dim: #64748b;
+            --accent-purple: #9d50bb;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background: var(--bg-darker); color: #fff; display: flex; height: 100vh; overflow: hidden; }
+
+        /* --- Sidebar (Consistent) --- */
+        nav { width: 260px; background: var(--bg-panel); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 30px 20px; flex-shrink: 0; }
+        .nav-logo { font-weight: 800; color: var(--cosmic-blue); letter-spacing: 3px; margin-bottom: 50px; display: flex; align-items: center; gap: 12px; }
+        .nav-item { padding: 12px 15px; color: var(--text-dim); text-decoration: none; margin-bottom: 4px; border-radius: 8px; display: flex; align-items: center; gap: 12px; font-size: 0.9rem; }
+        .nav-item.active { background: rgba(0, 242, 255, 0.08); color: var(--cosmic-blue); border-left: 3px solid var(--cosmic-blue); }
+
+        /* --- Main Content --- */
+        .main-wrapper { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+        
+        /* Command Bar */
+        .search-container {
+            padding: 25px 40px;
+            background: linear-gradient(to right, rgba(0,242,255,0.02), transparent);
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .command-bar {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 15px 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .command-bar input {
+            background: transparent;
+            border: none;
+            color: #fff;
+            width: 100%;
+            outline: none;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.95rem;
+        }
+
+        /* Filters & Toolbar */
+        .toolbar {
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0,0,0,0.2);
+        }
+
+        .filter-group { display: flex; gap: 15px; }
+        .filter-btn {
+            background: var(--bg-panel);
+            border: 1px solid var(--border);
+            color: var(--text-dim);
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .filter-btn:hover { border-color: var(--cosmic-blue); color: #fff; }
+
+        /* Table Area */
+        .table-area { flex: 1; padding: 0 40px 40px; overflow-y: auto; }
+        
+        table { width: 100%; border-collapse: collapse; background: var(--bg-panel); border-radius: 12px; overflow: hidden; }
+        th { background: rgba(255,255,255,0.02); text-align: left; padding: 18px; font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase; border-bottom: 1px solid var(--border); }
+        td { padding: 18px; font-size: 0.85rem; border-bottom: 1px solid rgba(255,255,255,0.03); }
+        tr:hover { background: rgba(0, 242, 255, 0.02); }
+
+        .tag { padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; background: rgba(255,255,255,0.1); }
+        .tag-ir { color: #ff4b2b; border: 1px solid rgba(255,75,43,0.3); }
+        .tag-opt { color: #00ff88; border: 1px solid rgba(0,255,136,0.3); }
+
+        .action-icon {
+            color: var(--text-dim);
+            margin-left: 15px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .action-icon:hover { color: var(--cosmic-blue); }
+
+        /* Export Button */
+        .btn-export {
+            background: linear-gradient(45deg, var(--cosmic-blue), var(--accent-purple));
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+    </style>
+</head>
+<body>
+<nav>
+        <div class="nav-logo"><i class="fas fa-satellite"></i> COSMIC</div>
+        
+        <p class="nav-group-label">Core</p>
+        <a href="Dashboard.html" class="nav-item active"><i class="fas fa-th-large"></i> Dashboard</a>
+        <a href="Data_Ingestion_Page.html" class="nav-item"><i class="fas fa-upload"></i> Data Ingestion</a>
+        <a href="Central_Data_Repository.html" class="nav-item"><i class="fas fa-server"></i> Repository</a>
+        
+        <p class="nav-group-label">Analysis</p>
+        <a href="Visualization_Page.html" class="nav-item"><i class="fas fa-expand"></i> Visualization</a>
+        <a href="AI_Insights_Page.html" class="nav-item"><i class="fas fa-brain"></i> AI Insights</a>
+
+        <p class="nav-group-label" style="margin-top:auto">Admin</p>
+        <a href="Governance.html" class="nav-item"><i class="fas fa-shield-alt"></i> Governance</a>
+        <a href="" class="nav-item"><i class="fas fa-cog"></i> Settings</a>
+    </nav>
+
+    <div class="main-wrapper">
+        <div class="search-container">
+            <div class="command-bar">
+                <i class="fas fa-terminal" style="color: var(--cosmic-blue);"></i>
+                <input type="text" placeholder="SELECT * FROM datasets WHERE wavelength = 'Infrared' AND mission = 'JWST'...">
+            </div>
+        </div>
+
+        <div class="toolbar">
+            <div class="filter-group">
+                <button class="filter-btn">Mission <i class="fas fa-chevron-down"></i></button>
+                <button class="filter-btn">Wavelength <i class="fas fa-chevron-down"></i></button>
+                <button class="filter-btn">Coord Range <i class="fas fa-crosshairs"></i></button>
+            </div>
+            <button class="btn-export">
+                <i class="fas fa-file-export"></i> Export Result
+            </button>
+        </div>
+
+        <div class="table-area">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Dataset ID</th>
+                        <th>Mission</th>
+                        <th>Date (UTC)</th>
+                        <th>Wavelength</th>
+                        <th>Resolution</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="color: var(--cosmic-blue); font-weight: 600;">NGC-4321-ALPHA</td>
+                        <td>JWST</td>
+                        <td>2025-11-09</td>
+                        <td><span class="tag tag-ir">INFRARED</span></td>
+                        <td>0.06 arcsec</td>
+                        <td>
+                            <i class="fas fa-eye action-icon" title="View"></i>
+                            <i class="fas fa-chart-line action-icon" title="Visualize"></i>
+                            <i class="fas fa-download action-icon" title="Export FITS"></i>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="color: var(--cosmic-blue); font-weight: 600;">ORION-NEB-99</td>
+                        <td>Hubble</td>
+                        <td>2025-12-01</td>
+                        <td><span class="tag tag-opt">OPTICAL</span></td>
+                        <td>0.04 arcsec</td>
+                        <td>
+                            <i class="fas fa-eye action-icon" title="View"></i>
+                            <i class="fas fa-chart-line action-icon" title="Visualize"></i>
+                            <i class="fas fa-download action-icon" title="Export FITS"></i>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="color: var(--cosmic-blue); font-weight: 600;">GAIA-DR3-402</td>
+                        <td>Gaia</td>
+                        <td>2026-01-04</td>
+                        <td><span class="tag">MULTI</span></td>
+                        <td>N/A</td>
+                        <td>
+                            <i class="fas fa-eye action-icon" title="View"></i>
+                            <i class="fas fa-chart-line action-icon" title="Visualize"></i>
+                            <i class="fas fa-download action-icon" title="Export FITS"></i>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+    function highlightActivePage() {
+        // 1. Get the current file name from the URL (e.g., "AI_Insights_Page.html")
+        const path = window.location.pathname;
+        const page = path.split("/").pop();
+
+        // 2. Remove any existing active classes
+        const navItems = document.querySelectorAll('.nav-item');
+        navItems.forEach(item => item.classList.remove('active'));
+
+        // 3. Match the page name to the link's href
+        navItems.forEach(item => {
+            const href = item.getAttribute('href');
+            if (page === href) {
+                item.classList.add('active');
+            }
+        });
+        
+        // Default: If it's just the root or index, highlight Dashboard
+        if (page === "" || page === "index.html") {
+            document.getElementById('nav-dashboard').classList.add('active');
+        }
+    }
+
+    // Run on load
+    window.onload = highlightActivePage;
+
+    // Your existing functions (like showDetail) go here
+    function showDetail() {
+        alert("Neural Engine Insight: Potential microlensing event detected.");
+    }
+</script>
+</body>
+</html>

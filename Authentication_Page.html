@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Access | COSMIC Platform</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --space-black: #05070a;
+            --cosmic-blue: #007aff;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.1);
+            --text-dim: #a0a0a0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background: var(--space-black); color: white; height: 100vh; overflow: hidden; }
+
+        .auth-container { display: flex; height: 100vh; width: 100%; }
+
+        /* --- Left Side: Observatory Visual --- */
+        .auth-visual {
+            flex: 1.2;
+            background: linear-gradient(rgba(5, 7, 10, 0.4), rgba(5, 7, 10, 0.4)), 
+                        url('https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&q=80&w=1500');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 60px;
+            position: relative;
+        }
+
+        .auth-visual::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, transparent, var(--space-black));
+        }
+
+        .visual-content { position: relative; z-index: 2; max-width: 500px; }
+        .visual-content h2 { font-size: 2.5rem; margin-bottom: 15px; }
+        .visual-content p { color: var(--text-dim); line-height: 1.6; }
+
+        /* --- Right Side: Login Card --- */
+        .auth-form-side {
+            flex: 1;
+            background: var(--space-black);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            border-left: 1px solid var(--border);
+        }
+
+        .auth-card { width: 100%; max-width: 400px; animation: fadeIn 0.8s ease-out; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+
+        .logo { font-weight: 800; font-size: 1.5rem; margin-bottom: 40px; color: var(--cosmic-blue); letter-spacing: 2px; }
+
+        h3 { font-size: 1.8rem; margin-bottom: 8px; }
+        .subtitle { color: var(--text-dim); font-size: 0.9rem; margin-bottom: 30px; }
+
+        /* Form Controls */
+        .input-group { margin-bottom: 20px; }
+        label { display: block; font-size: 0.8rem; color: var(--text-dim); margin-bottom: 8px; text-transform: uppercase; }
+        
+        input, select {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--glass-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: white;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input:focus { border-color: var(--cosmic-blue); background: rgba(255,255,255,0.06); }
+
+        /* Role Selector Custom Style */
+
+        .btn {
+        padding: 10px 150px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        display: inline-block;
+        transition: 0.3s;
+      }
+
+      .btn-blue {
+        background: var(--cosmic-blue);
+        color: white;
+        box-shadow: 0 4px 15px rgba(0, 162, 255, 0.3);
+      }
+
+      .btn-blue:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0, 162, 255, 0.5);
+      }
+        .role-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+        
+        .role-option {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: 0.3s;
+        }
+
+        .role-option.active {
+            background: var(--cosmic-blue);
+            border-color: var(--cosmic-blue);
+            color: white;
+        }
+
+        .btn-auth {
+            width: 100%;
+            padding: 14px;
+            background: var(--cosmic-blue);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: 0.3s;
+        }
+
+        .btn-auth:hover { filter: brightness(1.2); transform: translateY(-2px); }
+
+        .divider {
+            text-align: center;
+            margin: 20px 0;
+            position: relative;
+            color: var(--text-dim);
+            font-size: 0.8rem;
+        }
+        .divider::before, .divider::after {
+            content: ""; position: absolute; top: 50%; width: 40%; height: 1px; background: var(--border);
+        }
+        .divider::before { left: 0; } .divider::after { right: 0; }
+
+        .btn-institution {
+            width: 100%;
+            padding: 12px;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: 0.3s;
+        }
+        .btn-institution:hover { background: var(--glass-bg); }
+
+        .privacy-note {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 0.75rem;
+            color: #555;
+            border-top: 1px solid var(--border);
+            padding-top: 20px;
+        }
+
+        @media (max-width: 900px) {
+            .auth-visual { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="auth-container">
+        <div class="auth-visual">
+            <div class="visual-content">
+                <h2>Access the Cosmos.</h2>
+                <p>Securely connect to the world's largest unified astronomical database. Built for the rigorous standards of global research institutions.</p>
+            </div>
+        </div>
+
+        <div class="auth-form-side">
+            <div class="auth-card">
+                <div class="logo">COSMIC</div>
+                <h3>Research Login</h3>
+                <p class="subtitle">Enter your credentials to access the platform.</p>
+
+                <form id="authForm">
+                    <div class="input-group">
+                        <label>Institutional ID / Email</label>
+                        <input type="text" placeholder="name@university.edu" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Password</label>
+                        <input type="password" placeholder="••••••••" required>
+                    </div>
+
+                    <label>Select Your Role</label>
+                    <div class="role-selector">
+                        <div class="role-option active" onclick="setRole(this)">Researcher</div>
+                        <div class="role-option" onclick="setRole(this)">Student</div>
+                        <div class="role-option" onclick="setRole(this)">Admin</div>
+                    </div>
+               
+                  <a href="Dashboard.html" class="btn btn-blue">Sign In</a>
+
+                    <div class="divider">OR</div>
+
+                    <button type="button" class="btn-institution">
+                        <i class="fas fa-university"></i>
+                        Login with Institution (SSO)
+                    </button>
+                </form>
+
+                <div class="privacy-note">
+                    <i class="fas fa-shield-alt"></i> 
+                    Data privacy & reproducibility guaranteed via ESA/NASA encryption standards.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function setRole(element) {
+            document.querySelectorAll('.role-option').forEach(opt => opt.classList.remove('active'));
+            element.classList.add('active');
+        }
+
+        document.getElementById('authForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Authenticating with secure research gateway...');
+        });
+    </script>
+    
+</body>
+</html>

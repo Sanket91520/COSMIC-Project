@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Insights | COSMIC</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            /* Unified Palette - Switched to Neon Blue */
+            --bg-deep: #020408;
+            --bg-panel: #0a0d14;
+            --cosmic-blue: #00f2ff; /* Primary Neon Color */
+            --text-main: #e0e6ed;
+            --text-dim: #64748b;
+            --border: rgba(0, 242, 255, 0.15); /* Blue Border */
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        
+        body { 
+            background: var(--bg-deep); 
+            color: var(--text-main); 
+            display: flex; 
+            height: 100vh; 
+            overflow: hidden; 
+        }
+
+        /* --- Unified Sidebar --- */
+        nav {
+            width: 260px;
+            background: var(--bg-panel);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            padding: 30px 20px;
+            flex-shrink: 0;
+        }
+
+        .nav-logo {
+            font-weight: 800;
+            color: var(--cosmic-blue);
+            letter-spacing: 3px;
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.2rem;
+        }
+
+        .nav-group-label {
+            font-size: 0.65rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin: 20px 0 10px 10px;
+        }
+
+        .nav-item {
+            padding: 12px 15px;
+            color: var(--text-dim);
+            text-decoration: none;
+            margin-bottom: 4px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: rgba(0, 242, 255, 0.05);
+            color: var(--cosmic-blue);
+        }
+
+        .nav-item.active {
+            border-left: 3px solid var(--cosmic-blue);
+            font-weight: 600;
+            background: rgba(0, 242, 255, 0.1);
+        }
+
+        /* --- Main Layout --- */
+        .viewport {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        header {
+            height: 80px;
+            padding: 0 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            background: rgba(10, 13, 20, 0.8);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+        }
+
+        /* --- AI Discovery Grid --- */
+        main {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 25px;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        .analysis-core {
+            background: rgba(10, 13, 20, 0.5);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- Chart Section --- */
+        .chart-container {
+            flex: 1;
+            min-height: 300px;
+            margin: 20px 0;
+            position: relative;
+            border-bottom: 1px solid var(--border);
+            border-left: 1px solid var(--border);
+            background: linear-gradient(to top right, rgba(0, 242, 255, 0.02), transparent);
+        }
+
+        .anomaly-point { 
+            position: absolute; width: 14px; height: 14px; 
+            background: var(--cosmic-blue); border-radius: 50%; 
+            box-shadow: 0 0 15px var(--cosmic-blue); cursor: pointer; 
+            transform: translate(-50%, -50%);
+            z-index: 10;
+        }
+
+        /* --- Cards & Insights --- */
+        .insight-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .insight-card {
+            background: var(--bg-panel);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .insight-card::before {
+            content: ''; position: absolute; top: 0; left: 0; 
+            width: 100%; height: 2px; 
+            background: linear-gradient(90deg, var(--cosmic-blue), transparent);
+        }
+
+        .confidence-meter {
+            height: 6px; width: 100%; 
+            background: rgba(255, 255, 255, 0.05); 
+            border-radius: 10px; margin: 12px 0;
+        }
+
+        .confidence-fill {
+            height: 100%; background: var(--cosmic-blue); 
+            box-shadow: 0 0 10px var(--cosmic-blue); 
+            border-radius: 10px;
+        }
+
+        /* --- UI Components --- */
+        .btn-primary {
+            background: var(--cosmic-blue);
+            color: #000; /* Black text looks better on bright neon blue */
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-primary:hover { opacity: 0.8; transform: translateY(-1px); }
+
+        .ai-status {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--cosmic-blue);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 5px;
+        }
+
+        .pulse {
+            width: 8px; height: 8px;
+            background: var(--cosmic-blue);
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(2.5); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+ <nav id="main-sidebar">
+    <div class="nav-logo"><i class="fas fa-satellite"></i> COSMIC</div>
+    
+    <p class="nav-group-label">Core</p>
+    <a href="Dashboard.html" class="nav-item" id="nav-dashboard">
+        <i class="fas fa-th-large"></i> Dashboard
+    </a>
+    <a href="Data_Ingestion_Page.html" class="nav-item" id="nav-ingestion">
+        <i class="fas fa-upload"></i> Data Ingestion
+    </a>
+    <a href="Central_Data_Repository.html" class="nav-item" id="nav-repository">
+        <i class="fas fa-server"></i> Repository
+    </a>
+    
+    <p class="nav-group-label">Analysis</p>
+    <a href="Visualization_Page.html" class="nav-item" id="nav-visualization">
+        <i class="fas fa-expand"></i> Visualization
+    </a>
+    <a href="AI_Insights_Page.html" class="nav-item" id="nav-ai">
+        <i class="fas fa-brain"></i> AI Insights
+    </a>
+
+    <p class="nav-group-label" style="margin-top:auto">Admin</p>
+    <a href="Governance.html" class="nav-item" id="nav-governance">
+        <i class="fas fa-shield-alt"></i> Governance
+    </a>
+    <a href="" class="nav-item" id="nav-settings">
+        <i class="fas fa-cog"></i> Settings
+    </a>
+</nav>
+
+    <div class="viewport">
+        <header>
+            <div>
+                <h2 style="font-weight: 300; letter-spacing: 1px; color: white;">DISCOVERY <span style="font-weight: 800; color: var(--cosmic-blue);">ENGINE</span></h2>
+                <div class="ai-status"><div class="pulse"></div> NEURAL_MODELS: ACTIVE | ANOMALY_SENSITIVITY: 94%</div>
+            </div>
+            <button class="btn-primary">RUN NEW INFERENCE</button>
+        </header>
+
+        <main>
+            <section class="analysis-core">
+                <h4 style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-dim); letter-spacing: 1px;">Flux Prediction & Anomaly Mapping</h4>
+                
+                <div class="chart-container" id="main-chart">
+                    <svg width="100%" height="100%" viewBox="0 0 800 300" preserveAspectRatio="none" style="overflow: visible;">
+                        <path d="M0,250 Q100,200 200,220 T400,100 T600,150 T800,50" stroke="var(--cosmic-blue)" stroke-width="2" fill="none" />
+                        <path d="M0,250 Q100,210 200,230 T400,120 T600,170 T800,80" stroke="var(--cosmic-blue)" stroke-width="1" stroke-dasharray="5,5" opacity="0.3" fill="none" />
+                    </svg>
+                    <div class="anomaly-point" style="left: 50%; top: 33%;" onclick="showDetail()"></div>
+                    <div class="anomaly-point" style="left: 75%; top: 50%;"></div>
+                </div>
+
+                <div class="insight-grid">
+                    <div class="insight-card">
+                        <span style="font-size: 0.65rem; color: var(--text-dim); font-weight: bold;">PATTERN RECOGNITION</span>
+                        <p style="font-size: 0.85rem; margin-top: 8px; line-height: 1.4;">Recurrent Light Curve detected. Matches: <span style="color: var(--cosmic-blue);">Type Ia Supernova</span></p>
+                    </div>
+                    <div class="insight-card">
+                        <span style="font-size: 0.65rem; color: var(--text-dim); font-weight: bold;">CLUSTERING</span>
+                        <p style="font-size: 0.85rem; margin-top: 8px; line-height: 1.4;">Data correlates with <span style="color: var(--cosmic-blue);">NGC-4432</span> high-energy metadata.</p>
+                    </div>
+                    <div class="insight-card">
+                        <span style="font-size: 0.65rem; color: var(--text-dim); font-weight: bold;">NOISE FILTRATION</span>
+                        <p style="font-size: 0.85rem; margin-top: 8px; line-height: 1.4;">Successfully isolated <span style="color: var(--cosmic-blue);">42.1 GB</span> of signal from jitter.</p>
+                    </div>
+                </div>
+            </section>
+
+            <aside class="insights-sidebar">
+                <div class="insight-card" style="margin-bottom: 20px;">
+                    <h4 style="font-size: 0.75rem; color: var(--cosmic-blue); letter-spacing: 1px;">WHY THIS ANOMALY?</h4>
+                    <p style="font-size: 0.85rem; color: var(--text-main); margin-top: 12px; line-height: 1.5;">
+                        Object 402x shows a flux spike inconsistent with known stellar flares. Spectral fingerprint suggests potential transient event.
+                    </p>
+                    <div style="margin-top: 20px;">
+                        <div style="display:flex; justify-content:space-between; font-size: 0.7rem; font-family: var(--font-mono);">
+                            <span>CONFIDENCE SCORE</span>
+                            <span style="color: var(--cosmic-blue);">98.4%</span>
+                        </div>
+                        <div class="confidence-meter"><div class="confidence-fill" style="width: 98%;"></div></div>
+                    </div>
+                </div>
+
+                <div class="insight-card">
+                    <h4 style="font-size: 0.75rem; color: var(--cosmic-blue); letter-spacing: 1px;">PREDICTED TREND</h4>
+                    <p style="font-size: 0.75rem; color: var(--text-dim); margin-top: 10px;">Next 48 Hours Projection:</p>
+                    <p style="font-size: 1.2rem; color: #fff; margin: 12px 0; font-family: var(--font-mono);">DECAY: -0.42% / hr</p>
+                    <button style="width: 100%; padding: 10px; background: rgba(0, 242, 255, 0.05); border: 1px solid var(--cosmic-blue); color: var(--cosmic-blue); cursor: pointer; font-size: 0.75rem; font-weight: bold; border-radius: 4px;">NOTIFY TELESCOPE NETWORK</button>
+                </div>
+            </aside>
+        </main>
+    </div>
+
+    <script>
+        function highlightActivePage() {
+            const path = window.location.pathname;
+            const page = path.split("/").pop();
+            const navItems = document.querySelectorAll('.nav-item');
+            
+            navItems.forEach(item => {
+                const href = item.getAttribute('href');
+                if (page === href) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+            
+            if (page === "" || page === "index.html") {
+                document.getElementById('nav-dashboard').classList.add('active');
+            }
+        }
+
+        window.onload = highlightActivePage;
+
+        function showDetail() {
+            alert("Neural Engine Insight: Potential microlensing event detected.");
+        }
+    </script>
+</body>
+</html>
